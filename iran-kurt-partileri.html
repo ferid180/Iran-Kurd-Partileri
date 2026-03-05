@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>İran Kürt Partileri — Siyasi Talepler</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@300;400;500&display=swap');
+
+:root {
+  --bg:     #f5f2ec;
+  --bg2:    #ede9e1;
+  --line:   #8a6820;
+  --line2:  #c8a84b;
+  --acc:    #b83820;
+  --text:   #1a1714;
+  --muted:  #7a7060;
+  --dim:    #eae6de;
+  --dim2:   #ddd8ce;
+  --border: rgba(138,104,32,0.15);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'IBM Plex Mono', monospace;
+  overflow-x: hidden;
+}
+
+/* ── HEADER ── */
+header {
+  padding: 80px 60px 60px;
+  border-bottom: 1px solid rgba(138,104,32,0.2);
+  position: relative; overflow: hidden;
+  background: var(--bg);
+}
+
+header::after {
+  content: 'Rojhilat';
+  position: absolute; right: 40px; top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(60px, 12vw, 130px);
+  color: rgba(138,104,32,0.05);
+  pointer-events: none; white-space: nowrap;
+  letter-spacing: 4px; font-style: italic;
+}
+
+.kicker {
+  font-size: 11px; letter-spacing: 4px;
+  text-transform: uppercase; color: var(--line);
+  margin-bottom: 24px;
+}
+
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 5vw, 60px);
+  font-weight: 700; line-height: 1.05;
+  max-width: 700px; color: var(--text);
+}
+
+h1 em { font-style: italic; color: var(--line); }
+
+.subtitle {
+  margin-top: 20px; font-size: 13px;
+  color: var(--muted); max-width: 520px;
+  line-height: 1.7; letter-spacing: 0.3px;
+}
+
+/* ── LEGEND ── */
+.legend {
+  display: flex; gap: 24px;
+  padding: 18px 60px;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+  background: var(--bg2);
+}
+
+.leg-item {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 10px; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--muted);
+}
+
+.leg-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+
+/* ── TIMELINE ── */
+.timeline { padding: 60px; position: relative; }
+
+.spine {
+  position: absolute; left: 60px; top: 0; bottom: 0; width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(138,104,32,0.25) 5%, rgba(138,104,32,0.25) 95%, transparent);
+}
+
+/* ── PARTY BLOCK ── */
+.party {
+  margin-bottom: 8px;
+  opacity: 0; transform: translateY(16px);
+  animation: fadeUp 0.45s ease forwards;
+}
+
+.party-header {
+  display: flex; align-items: center; gap: 16px;
+  cursor: pointer; padding: 14px 0 14px 40px;
+  user-select: none; position: relative;
+  border-radius: 2px;
+  transition: background 0.2s;
+}
+.party-header:hover { background: rgba(138,104,32,0.04); }
+
+.party-header::before {
+  content: ''; position: absolute; left: -8px;
+  width: 17px; height: 17px; border-radius: 50%;
+  border: 2px solid var(--line2); background: var(--bg);
+  z-index: 2; transition: background 0.3s;
+}
+.party-header:hover::before { background: var(--line2); }
+
+.party-year {
+  font-size: 10px; letter-spacing: 3px; color: var(--line);
+  min-width: 80px;
+}
+
+.party-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px; font-weight: 700; flex: 1;
+  color: var(--text);
+}
+
+.party-tag {
+  font-size: 8px; letter-spacing: 2px;
+  text-transform: uppercase; padding: 3px 10px;
+  border-radius: 20px; border: 1px solid;
+}
+
+.tag-sol    { border-color: #b05030; color: #b05030; background: rgba(176,80,48,0.06); }
+.tag-sosdem { border-color: #2a72c8; color: #2a72c8; background: rgba(42,114,200,0.06); }
+.tag-millt  { border-color: #8a6820; color: #8a6820; background: rgba(138,104,32,0.06); }
+.tag-konf   { border-color: #3a8a3a; color: #3a8a3a; background: rgba(58,138,58,0.06); }
+
+.toggle-icon {
+  font-size: 11px; color: var(--muted);
+  transition: transform 0.3s; flex-shrink: 0;
+}
+.party.open .toggle-icon { transform: rotate(90deg); }
+
+/* ── BODY ── */
+.party-body {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1);
+}
+.party.open .party-body { max-height: 1600px; }
+
+.party-content { padding: 4px 0 32px 40px; }
+
+/* ── INFO GRID ── */
+.info-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 8px; margin-bottom: 14px;
+}
+
+.info-card {
+  background: var(--dim);
+  border: 1px solid var(--border);
+  padding: 12px 14px;
+}
+
+.info-card .ic-label {
+  font-size: 8px; letter-spacing: 2.5px;
+  text-transform: uppercase; color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.info-card .ic-value {
+  font-size: 11.5px; line-height: 1.6; color: var(--text);
+}
+
+/* ── DEMAND CARDS ── */
+.demand-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-left: 3px solid;
+  padding: 14px 18px; margin-bottom: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+.demand-card.sol    { border-left-color: #b05030; }
+.demand-card.sosdem { border-left-color: #2a72c8; }
+.demand-card.millt  { border-left-color: #8a6820; }
+.demand-card.konf   { border-left-color: #3a8a3a; }
+
+.demand-card .dc-cat {
+  font-size: 8px; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.demand-card .dc-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 14px; font-weight: 700;
+  color: var(--text); margin-bottom: 6px;
+}
+
+.demand-card .dc-desc {
+  font-size: 11.5px; line-height: 1.75;
+  color: #5a5248;
+}
+
+/* slogan */
+.slogan-box {
+  border: 1px solid rgba(138,104,32,0.25);
+  background: rgba(200,168,75,0.07);
+  padding: 12px 16px; margin-bottom: 14px;
+  display: flex; align-items: center; gap: 12px;
+}
+.slogan-box .sq { width:3px; flex-shrink:0; align-self:stretch; background:var(--line); }
+.slogan-box .sl-text {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-size: 14px;
+  color: var(--line); letter-spacing: 0.3px;
+}
+
+/* section label */
+.section-label {
+  font-size: 8px; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--muted);
+  margin: 14px 0 8px; padding-bottom: 5px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* source */
+.source-line {
+  font-size: 10px; color: var(--muted);
+  letter-spacing: 1px; margin-top: 10px;
+}
+.source-line a { color: var(--line); text-decoration: none; }
+.source-line a:hover { text-decoration: underline; }
+
+/* ── COALITION BOX ── */
+.coalition-box {
+  margin: 0 60px 40px;
+  border: 1px solid rgba(138,104,32,0.2);
+  border-left: 4px solid var(--line);
+  padding: 24px 28px;
+  background: rgba(200,168,75,0.05);
+}
+.coalition-box .cb-kicker {
+  font-size: 8px; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--line);
+  margin-bottom: 8px;
+}
+.coalition-box .cb-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px; font-weight: 700;
+  color: var(--text); margin-bottom: 10px;
+}
+.coalition-box .cb-desc {
+  font-size: 12px; line-height: 1.8; color: #5a5248;
+}
+
+/* ── STATS BAR ── */
+.stats-bar {
+  display: flex; gap: 1px;
+  padding: 40px 60px 20px;
+  border-top: 1px solid var(--border);
+  background: var(--bg2);
+}
+.stat-block {
+  flex:1; padding:20px; background:#fff;
+  text-align:center; border:1px solid var(--border);
+  transition: background 0.2s;
+}
+.stat-block:hover { background: rgba(200,168,75,0.08); }
+.stat-num   { font-family:'Playfair Display',serif; font-size:28px; color:var(--line); display:block; }
+.stat-label { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-top:4px; display:block; }
+
+footer {
+  padding: 28px 60px;
+  font-size: 10px; color: var(--muted);
+  letter-spacing: 1px;
+  border-top: 1px solid var(--border);
+  background: var(--bg2);
+}
+
+@keyframes fadeUp {
+  to { opacity:1; transform:translateY(0); }
+}
+.party:nth-child(1){animation-delay:.05s}
+.party:nth-child(2){animation-delay:.10s}
+.party:nth-child(3){animation-delay:.15s}
+.party:nth-child(4){animation-delay:.20s}
+.party:nth-child(5){animation-delay:.25s}
+.party:nth-child(6){animation-delay:.30s}
+.party:nth-child(7){animation-delay:.35s}
+
+@media(max-width:700px){
+  header,.timeline,.stats-bar,.legend,.coalition-box,footer{padding-left:24px;padding-right:24px;}
+  .spine{left:24px;}
+  .party-header,.party-content{padding-left:30px;}
+  .info-grid{grid-template-columns:1fr;}
+  .stats-bar{flex-wrap:wrap;}
+  .stat-block{min-width:45%;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kicker">Siyasi Talepler · İdeoloji · Örgütsel Yapı</div>
+  <h1>İran Kürdistanı (Rojhilat)<br><em>Kürt Partileri: Siyasi Program</em></h1>
+  <p class="subtitle">Rojhilat'ta faaliyet yürüten yedi parti ve örgütün resmi kaynaklardan derlenen siyasi talepleri, ideolojik konumları ve hedefleri.</p>
+</header>
+
+<div class="legend">
+  <div class="leg-item"><div class="leg-dot" style="background:#b05030"></div>Sol / Marksist</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#2a72c8"></div>Sosyal Demokrat</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#8a6820"></div>Milliyetçi / Cumhuriyetçi</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#3a8a3a"></div>Demokratik Konfederalizm</div>
+</div>
+
+<div class="timeline">
+<div class="spine"></div>
+
+<!-- 1. KDP-İ -->
+<div class="party">
+  <div class="party-header">
+    <span class="party-year">1945</span>
+    <span class="party-name">KDP-İ — Kürdistan Demokrat Partisi (İran)</span>
+    <span class="party-tag tag-sosdem">Sosyal Demokrat</span>
+    <span class="toggle-icon">▶</span>
+  </div>
+  <div class="party-body">
+    <div class="party-content">
+
+      <div class="slogan-box">
+        <div class="sq"></div>
+        <div class="sl-text">"Democracy for Iran, Autonomy for Kurdistan"</div>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="ic-label">Liderlik</div>
+          <div class="ic-value">Mustafa Hijri (Genel Sekreter)</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-label">Merkez</div>
+          <div class="ic-value">Koya, Irak Kürdistanı</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-label">İdeoloji</div>
+          <div class="ic-value">Demokratik sosyalizm, Kürt ulusal hakları</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-label">Uluslararası üyelik</div>
+          <div class="ic-value">Sosyalist Enternasyonal (SI) · UNPO</div>
+        </div>
+      </div>
+
+      <div class="section-label">Siyasi Talepler</div>
+
+      <div class="demand-card sosdem">
+        <div class="dc-cat">Yönetim Modeli</div>
+        <div class="dc-title">Federal ve Demokratik İran</div>
+        <div class="dc-desc">KDP-İ, demokratik ve federal bir İran çerçevesinde Kürt ulusal haklarının elde edilmesi için mücadele etmektedir. İran'daki diğer ulusları — Azeri, Beluç, Türkmen, Arap — stratejik müttefik olarak görmekte, onların ulusal hak taleplerini desteklemektedir. Bu doğrultuda Federal İran için Uluslar Kongresi'ni (CNFI) kurmuştur.</div>
+      </div>
+
+      <div class="demand-card sosdem">
+        <div class="dc-cat">Kürt Özerkliği</div>
+        <div class="dc-title">Rojhilat için Özerklik</div>
+        <div class="dc-desc">Federal sistem içinde İran Kürdistanı'nın (Rojhilat) özerk yönetim hakkı. KDP-İ, UNPO'da Rojhilat'ın resmi temsilcisidir.</div>
+      </div>
+
+      <div class="demand-card sosdem">
+        <div class="dc-cat">Sosyal Adalet</div>
+        <div class="dc-title">Demokratik Sosyalizm</div>
+        <div class="dc-desc">Bireyler ve ulusların üyeleri olarak tüm insanların yaşamın her alanında özgür ve eşit olması. Ekonomik, siyasi ve sosyal politikalar bu inanç üzerine inşa edilmiştir.</div>
+      </div>
+
+      <div class="source-line">Resmi kaynak: <a href="https://pdki.org/english/about/" target="_blank">pdki.org/english/about</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- 2. KOMALA Mohtadi -->
+<div class="party">
+  <div class="party-header">
+    <span class="party-year">1969 / 2000</span>
+    <span class="party-name">Komala — İran Kürdistanı Komala Partisi (Mohtadi kolu)</span>
+    <span class="party-tag tag-sosdem">Sosyal Demokrat</span>
+    <span class="toggle-icon">▶</span>
+  </div>
+  <div class="party-body">
+    <div class="party-content">
+
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="ic-label">Liderlik</div>
+          <div class="ic-value">Abdullah Mohtadi</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-label">Merkez</div>
+          <div class="ic-value">Irak Kürdistanı</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-label">İdeoloji</div>
+          <div class="ic-value">Sosyal demokrasi, laiklik, federalizm</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-label">Tarihsel not</div>
+          <div class="ic-value">1969'da kuruldu; 2000'de CPI bünyesinden ayrılarak sosyal demokrat çizgiye geçti</div>
+        </div>
+      </div>
+
+      <div class="section-label">Siyasi Talepler</div>
+
+      <div class="demand-card sosdem">
+        <div class="dc-cat">Yönetim Modeli</div>
+        <div class="dc-title">Özgür, Federal ve Demokratik İran</div>
+        <div class="dc-desc">Komala (Mohtadi), İran'da özgür, federal ve demokratik bir sistem için mücadele etmektedir. Teokratik rejimin sona erdirilmesi ve laik demokratik düzenin kurulması temel hedef olarak tanımlanmıştır.</div>
+      </div>
+
+      <div class="demand-card sosdem">
+        <div class="dc-cat">Kürt ve Azınlık Hakları</div>
+        <div class="dc-title">Eşit Haklar ve Özerklik</div>
+        <div class="dc-desc">İran Kürtleri (Rojhilat) ve diğer azınlıkların eşit siyasi ve kültürel haklarla tanınması. Federal yapı içinde Kürdistan'ın özerk yönetimi.</div>
+      </div>
+
+      <div class="source-line">Resmi kaynak: <a href="https://www.komalainternational.org" target="_blank">komalainternational.org</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. KOMALA CPI / Alizadeh -->
+<div class="party">
+  <div class="party-header">
+    <span class="party-year">1969 / 1983</span>
+    <span class="party-name">Komala — İran Komünist Partisi Kürdistan Örgütü (Alizadeh kolu)</span>
+    <span class="party-tag tag-sol">Sol / Marksist</span>
+    <span class="toggle-icon">▶</span>
+  </div>
+  <div class="party-body">
+    <div class="party-content">
+
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="ic-label">Liderlik</div>
+          <div class="ic-value">Ebrahim Alizadeh</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-label">Merkez</div>
+          <div class="ic-value">Irak Kürdistanı</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-label">İdeoloji</div>
+          <div class="ic-value">Marksizm-Leninizm, işçi sınıfı siyaseti</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-label">Tarihsel not</div>
+          <div class="ic-value">1983'te İran Komünist Partisi'ne (CPI) katıldı; 2000 bölünmesinden sonra CPI'nin Kürdistan kanadı olarak ayrı varlığını sürdürdü</div>
+        </div>
+      </div>
+
+      <div class="section-label">Siyasi Talepler</div>
+
+      <div class="demand-card sol">
+        <div class="dc-cat">Rejim Değişikliği</div>
+        <div class="dc-title">İslam Cumhuriyeti'nin Devrilmesi</div>
+        <div class="dc-desc">İran İslam Cumhuriyeti'nin devrilmesi mücadelesinde diğer siyasi güçlerle işbirliğine açık olunması gerektiği savunulmaktadır. Rojhilat'ın kaderinin, Kürtlerin siyasi iradesini yansıtmayan herhangi bir kararla belirlenmesine karşı çıkılacağı vurgulanmaktadır.</div>
+      </div>
+
+      <div class="demand-card sol">
+        <div class="dc-cat">Kadın Özgürlüğü</div>
+        <div class="dc-title">Toplumsal Kurtuluş</div>
+        <div class="dc-desc">Kadın özgürlüğü ve toplumsal kurtuluş meselesi Kürt siyasi gündeminin merkezine konulmaktadır. İşçi sendikaları ve örgütlenmelerinin güçlendirilmesi zorunlu görülmektedir.</div>
+      </div>
+
+      <div class="demand-card sol">
+        <div class="dc-cat">Ekonomik Model</div>
+        <div class="dc-title">İşçi Sınıfına Dayalı Sistem</div>
+        <div class="dc-desc">Rojhilat'ın geleceğinde öngörülen yönetim modeli, işçi sınıfının çıkarlarını gözeten bir sistemdir.</div>
+      </div>
+
+      <div class="source-line">Resmi kaynak: <a href="http://www.komalah.org" target="_blank">komalah.org</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- 4. KOMALA TOILERS -->
+<div class="party">
+  <div class="party-header">
+    <span class="party-year">2007</span>
+    <span class="party-name">Komala — Kürdistan Emekçileri Örgütü (İlkhanizadeh kolu)</span>
+    <span class="party-tag tag-sol">Sol / Marksist</span>
+    <span class="toggle-icon">▶</span>
+  </div>
+  <div class="party-body">
+    <div class="party-content">
+
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="ic-label">Liderlik</div>
+          <div class="ic-value">Omar İlkhanizadeh</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-label">Merkez</div>
+          <div class="ic-value">Irak Kürdistanı</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-label">İdeoloji</div>
+          <div class="ic-value">Marksist-Leninist</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-label">Tarihsel not</div>
+          <div class="ic-value">2007'de CPI/Komala bünyesinden bölünme sonucu ortaya çıktı</div>
+        </div>
+      </div>
+
+      <div class="section-label">Siyasi Talepler</div>
+
+      <div class="demand-card sol">
+        <div class="dc-cat">Ulusal Hak</div>
+        <div class="dc-title">Kürtlerin Kendi Kaderini Tayin Hakkı</div>
+        <div class="dc-desc">Kürt halkının kendi kaderini tayin hakkı. Sosyalist İran çerçevesinde ulusal ve sınıfsal kurtuluşun birlikte gerçekleştirilmesi.</div>
+      </div>
+
+      <div class="demand-card sol">
+        <div class="dc-cat">Yönetim</div>
+        <div class="dc-title">Sosyalist İran</div>
+        <div class="dc-desc">İşçi konseylerine dayalı, emekçi sınıfın yönetimde belirleyici olduğu bir İran hedeflenmektedir.</div>
+      </div>
+
+      <div class="source-line">Resmi kaynak: <a href="https://komele.org" target="_blank">komele.org</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- 5. PJAK -->
+<div class="party">
+  <div class="party-header">
+    <span class="party-year">2004</span>
+    <span class="party-name">PJAK — Kürdistan Özgür Yaşam Partisi</span>
+    <span class="party-tag tag-konf">Demokratik Konfederalizm</span>
+    <span class="toggle-icon">▶</span>
+  </div>
+  <div class="party-body">
+    <div class="party-content">
+
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="ic-label">İdeoloji</div>
+          <div class="ic-value">Demokratik konfederalizm, ekoloji, kadın özgürlüğü</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-label">Faaliyet alanı</div>
+          <div class="ic-value">İran-Irak sınırı, Kandil bölgesi</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-label">İdeolojik Temel</div>
+          <div class="ic-value">Abdullah Öcalan'ın demokratik konfederalizm modeli</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-label">Örgütsel özellik</div>
+          <div class="ic-value">Militanların yaklaşık yarısı kadınlardan oluşmaktadır</div>
+        </div>
+      </div>
+
+      <div class="section-label">Siyasi Talepler</div>
+
+      <div class="demand-card konf">
+        <div class="dc-cat">Siyasi Model</div>
+        <div class="dc-title">Demokratik Konfederalizm</div>
+        <div class="dc-desc">Rojhilat'ta demokratik konfederalizm sisteminin hayata geçirilmesi. Demokratik, ekolojik ve cinsiyete duyarlı bir toplum paradigması hedeflenmektedir. Köylerde köy konseyleri, şehirlerde özgür vatandaşlık konseyleri ve il konseyleri kurulması öngörülmektedir.</div>
+      </div>
+
+      <div class="demand-card konf">
+        <div class="dc-cat">Rejim Dönüşümü</div>
+        <div class="dc-title">İran'ın Demokratik Dönüşümü</div>
+        <div class="dc-desc">İran'daki hükümet iktidarının ve teokrasinin köklü biçimde değiştirilmesi. Etnik azınlıklar için özerkliği kabul eden federal ve demokratik bir hükümet yapısı. İran'ın tüm halklarıyla ortak demokratik dönüşüm.</div>
+      </div>
+
+      <div class="demand-card konf">
+        <div class="dc-cat">Toplumsal Paradigma</div>
+        <div class="dc-title">Kadın Özgürlüğü ve Ekoloji</div>
+        <div class="dc-desc">Kadın özgürlüğü ve ekolojik sürdürülebilirlik, yeni toplumsal paradigmanın temel eksenleri olarak konumlandırılmaktadır.</div>
+      </div>
+
+      <div class="source-line">Resmi kaynak: <a href="https://pjak.org" target="_blank">pjak.org</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- 6. PAK -->
+<div class="party">
+  <div class="party-header">
+    <span class="party-year">1991</span>
+    <span class="party-name">PAK — Kürdistan Özgürlük Partisi</span>
+    <span class="party-tag tag-millt">Milliyetçi / Cumhuriyetçi</span>
+    <span class="toggle-icon">▶</span>
+  </div>
+  <div class="party-body">
+    <div class="party-content">
+
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="ic-label">Liderlik</div>
+          <div class="ic-value">Hüseyin Yezdanpenah</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-label">Merkez</div>
+          <div class="ic-value">Irak Kürdistanı</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-label">İdeoloji</div>
+          <div class="ic-value">Kürt milliyetçiliği, seküler cumhuriyetçilik</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-label">Kaynak notu</div>
+          <div class="ic-value">Resmi site pazadik.net teknik nedenlerle erişime kapalı; bilgiler partinin kamuoyuna açık resmi açıklamalarından derlenmiştir</div>
+        </div>
+      </div>
+
+      <div class="section-label">Siyasi Talepler</div>
+
+      <div class="demand-card millt">
+        <div class="dc-cat">Ulusal Hedef</div>
+        <div class="dc-title">Kürt Ulusal Hakları ve Kendi Kaderini Tayin</div>
+        <div class="dc-desc">PAK, Kürt ulusal kimliği ve etnik hakları ekseninde bir siyasi program yürütmektedir. İran rejimiyle müzakere yerine aktif muhalefet ve silahlı mücadeleyi benimsemektedir. PAK'ın bağımsızlık mı yoksa öz yönetim mi talep ettiği, resmi siteye erişim sağlanamadığı için kesin olarak doğrulanamadığından bu bilgi güncellenecektir.</div>
+      </div>
+
+      <div class="demand-card millt">
+        <div class="dc-cat">Rejim</div>
+        <div class="dc-title">İran İslam Cumhuriyeti'nin Sona Erdirilmesi</div>
+        <div class="dc-desc">İran genelinde bir halk ayaklanmasıyla rejimin sona erdirilmesi ya da iktidarının daraltılması talep edilmektedir.</div>
+      </div>
+
+      <div class="source-line">Resmi kaynak: <a href="https://pazadik.net" target="_blank">pazadik.net</a> (erişim teknik nedenlerle sağlanamadı)</div>
+    </div>
+  </div>
+</div>
+
+<!-- 7. XEBAT -->
+<div class="party">
+  <div class="party-header">
+    <span class="party-year">1980</span>
+    <span class="party-name">Xebat — İran Kürdistanı Mücadele Örgütü</span>
+    <span class="party-tag tag-millt">Milliyetçi / Demokratik</span>
+    <span class="toggle-icon">▶</span>
+  </div>
+  <div class="party-body">
+    <div class="party-content">
+
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="ic-label">Merkez</div>
+          <div class="ic-value">Irak Kürdistanı</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-label">İdeoloji</div>
+          <div class="ic-value">Kürt milliyetçiliği; kuruluşunda İslamcı köken, günümüzde milliyetçi-demokratik söylem</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-label">Koalisyon</div>
+          <div class="ic-value">Şubat 2026 İran Kürdistanı Siyasi Güçler Koalisyonu imzacısı</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-label">Kaynak notu</div>
+          <div class="ic-value">Resmi site khabatonline.org; İngilizce programatik belgeye erişim sınırlı</div>
+        </div>
+      </div>
+
+      <div class="section-label">Siyasi Talepler</div>
+
+      <div class="demand-card millt">
+        <div class="dc-cat">Yönetim</div>
+        <div class="dc-title">İran'da Demokratik Rejim</div>
+        <div class="dc-desc">İran'da demokratik bir yönetim sisteminin kurulması. Teokratik yapının tasfiyesi ve sivil yönetimin tesisi temel hedef olarak benimsenmiştir.</div>
+      </div>
+
+      <div class="demand-card millt">
+        <div class="dc-cat">Kürt Hakları</div>
+        <div class="dc-title">Kürtlerin Kendi Kaderini Tayin Hakkı</div>
+        <div class="dc-desc">Kürt halkının kendi kaderini tayin hakkı ve Rojhilat'ta özerk yönetim.</div>
+      </div>
+
+      <div class="source-line">Resmi kaynak: <a href="http://khabatonline.org" target="_blank">khabatonline.org</a></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /timeline -->
+
+<div class="coalition-box">
+  <div class="cb-kicker">22 Şubat 2026 — Ortak Çerçeve</div>
+  <div class="cb-title">İran Kürdistanı (Rojhilat) Siyasi Güçler Koalisyonu</div>
+  <div class="cb-desc">KDP-İ, PJAK, PAK, Komala (Alizadeh kolu) ve Xebat'ın imzaladığı koalisyon bildirgesi; İslam Cumhuriyeti İran'ını devirmek için ortak mücadele, Kürt halkının kendi kaderini tayin hakkı, Rojhilat'ta Kürt ulusunun siyasi iradesine dayanan demokratik bir kurumun tesisi, Kürt öz savunma hakkının tanınması, iç şiddetin reddedilmesi ve ortak diplomatik komitenin kurulmasını kapsamaktadır. Mohtadi liderliğindeki Komala Partisi 4 Mart 2026'da koalisyona katıldı.</div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat-block"><span class="stat-num">7</span><span class="stat-label">Aktif Örgüt</span></div>
+  <div class="stat-block"><span class="stat-num">1945</span><span class="stat-label">En Eski Parti (KDP-İ)</span></div>
+  <div class="stat-block"><span class="stat-num">3</span><span class="stat-label">Komala Kolu</span></div>
+  <div class="stat-block"><span class="stat-num">2026</span><span class="stat-label">Koalisyon Yılı</span></div>
+</div>
+
+<footer>
+  İran Kürdistanı (Rojhilat) Kürt Partileri — Siyasi Program Analizi · Ferid Demirel için hazırlanmıştır · Kaynaklar: pdki.org · komalainternational.org · komalah.org · komele.org · pjak.org · pazadik.net · khabatonline.org
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var parties = document.querySelectorAll('.party');
+  parties.forEach(function(p) {
+    var header = p.querySelector('.party-header');
+    header.addEventListener('click', function() {
+      p.classList.toggle('open');
+    });
+  });
+  if (parties.length) parties[0].classList.add('open');
+});
+</script>
+
+</body>
+</html>
